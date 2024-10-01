@@ -1,4 +1,4 @@
-# Gulanova Website - Spreadsheet to JSON Converter
+# Spreadsheet to JSON Converter
 
 A simple, efficient tool to convert Google Spreadsheet data into JSON format.
 
