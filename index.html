@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet to JSON Converter</title>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        #message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="password" id="googleApi" placeholder="Google API Key">
+        <input type="text" id="spreadsheetId" placeholder="Spreadsheet ID">
+        <input type="text" id="range" placeholder="Range (e.g., Sheet1!A1:C10)">
+        <button onclick="loadGoogleAPI()">Generate JSON</button>
+        <textarea id="jsonOutput" readonly placeholder="Generated JSON text area"></textarea>
+        <button onclick="copyText()">Copy</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        let API_KEY = '';
+
+        function loadGoogleAPI() {
+            API_KEY = document.getElementById('googleApi').value;
+            if (!API_KEY) {
+                showMessage('Please enter a Google API Key');
+                return;
+            }
+            gapi.load('client', initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+                'apiKey': API_KEY,
+                'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+            }).then(function() {
+                generateJSON();
+            }, function(error) {
+                console.error('Error initializing Google API client', error);
+                showMessage('Error initializing Google API client. Please check your API Key.');
+            });
+        }
+
+        function generateJSON() {
+            const spreadsheetId = document.getElementById('spreadsheetId').value;
+            const range = document.getElementById('range').value;
+
+            if (!spreadsheetId || !range) {
+                showMessage('Please enter both Spreadsheet ID and Range');
+                return;
+            }
+
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: spreadsheetId,
+                range: range,
+            }).then(function(response) {
+                const values = response.result.values;
+                if (!values || values.length === 0) {
+                    showMessage('No data found.');
+                    return;
+                }
+
+                const headers = values[0];
+                const jsonOutput = values.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = row[index] || '';
+                    });
+                    return obj;
+                });
+
+                document.getElementById('jsonOutput').value = JSON.stringify(jsonOutput, null, 2);
+                showMessage('JSON generated successfully!', 'green');
+            }, function(response) {
+                console.error('Error fetching data from spreadsheet', response.result.error);
+                showMessage('Error fetching data. Please check your Spreadsheet ID and Range.');
+            });
+        }
+
+        function copyText() {
+            const textarea = document.getElementById('jsonOutput');
+            textarea.select();
+            document.execCommand('copy');
+            showMessage('JSON copied to clipboard!', 'green');
+        }
+
+        function showMessage(text, color = 'red') {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = text;
+            messageElement.style.color = color;
+        }
+    </script>
+</body>
+</html>
