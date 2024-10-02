@@ -1,11 +1,13 @@
-# Advanced Spreadsheet to JSON Converter
+# Spreadsheet to JSON Converter
 
-A powerful and flexible tool to convert Google Spreadsheet data into customized JSON format.
+A versatile tool to convert Google Spreadsheet data into JSON format, available in both basic and advanced versions.
 
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
+  - [Basic Version](#basic-version)
+  - [Advanced Version](#advanced-version)
 - [Prerequisites](#prerequisites)
 - [Contributing](#contributing)
 - [License](#license)
@@ -26,11 +28,13 @@ cd spreadsheet-to-json
 
 1. Open the project in [Visual Studio Code](https://code.visualstudio.com).
 2. Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension for VSCode.
-3. Right-click on `index.html` and select "Open with Live Server" to run the application locally.
+3. Right-click on `index.html` (for basic version) or `advanced.html` (for advanced version) and select "Open with Live Server" to run the application locally.
 
 ## Features
 
-### Key Components
+### Basic Version
+
+#### Key Components
 
 1. **Google API Key Input**: 
    - Obtain your API key from the [Google Cloud Console](https://console.cloud.google.com).
@@ -41,6 +45,36 @@ cd spreadsheet-to-json
 2. **Spreadsheet ID Input**:
    - Locate this in your Google Sheets URL between 'd/' and '/edit'.
    - Example: In `https://docs.google.com/spreadsheets/d/abc123xyz/edit#gid=0`, the ID is `abc123xyz`.
+
+3. **Range Input**:
+   - Specify the data range in A1 notation (e.g., 'Sheet1!A1:C10').
+   - The first row in your selected range will be used as JSON property names.
+
+4. **JSON Generation**:
+   - Click "Generate JSON" to convert your spreadsheet data into JSON format.
+   - The resulting JSON will be displayed in the text area below.
+
+5. **Copy Functionality**:
+   - Use the "Copy" button to easily copy the generated JSON to your clipboard.
+
+#### How to Use (Basic Version)
+
+1. Enter your Google API Key.
+2. Input the Spreadsheet ID.
+3. Specify the Range you want to convert.
+4. Click "Generate JSON".
+5. The generated JSON will appear in the text area.
+6. Use the "Copy" button to copy the JSON.
+
+### Advanced Version
+
+#### Key Components
+
+1. **Google API Key Input**: 
+   - Same as in the basic version.
+
+2. **Spreadsheet ID Input**:
+   - Same as in the basic version.
 
 3. **Custom Variables Input**:
    - Enter comma-separated variable names that will be used as keys in your JSON output.
@@ -58,10 +92,10 @@ cd spreadsheet-to-json
 6. **Copy Functionality**:
    - Use the "Copy JSON" button to easily copy the generated JSON to your clipboard.
 
-### How to Use
+#### How to Use (Advanced Version)
 
-1. Enter your Google API Key in the first input field.
-2. Input the Spreadsheet ID of the Google Sheet you want to convert.
+1. Enter your Google API Key.
+2. Input the Spreadsheet ID.
 3. In the "Custom Variables" field, enter the names you want to use for your JSON keys, separated by commas.
 4. In the "Formula" field, enter the ranges that correspond to each variable, also separated by commas.
 5. Click the "Generate JSON" button.
