@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,15 +16,19 @@
             margin: 0;
             background-color: #f0f8ff;
         }
+
         .container {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 500px;
         }
-        input, button {
+
+        input,
+        button,
+        textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -31,39 +36,56 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         textarea {
-            width: 100%;
             min-height: 150px;
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            box-sizing: border-box;
             resize: vertical;
         }
+
         #message {
             color: red;
             text-align: center;
             margin-top: 10px;
         }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <input type="password" id="googleApi" placeholder="Google API Key">
-        <input type="text" id="spreadsheetId" placeholder="Spreadsheet ID">
-        <input type="text" id="range" placeholder="Range (e.g., Sheet1!A1:C10)">
+        <div class="input-group">
+            <label for="googleApi">Google API Key:</label>
+            <input type="password" id="googleApi" placeholder="Enter your Google API Key">
+        </div>
+        <div class="input-group">
+            <label for="spreadsheetId">Spreadsheet ID:</label>
+            <input type="text" id="spreadsheetId" placeholder="Enter Spreadsheet ID">
+        </div>
+        <div class="input-group">
+            <label for="range">Range:</label>
+            <input type="text" id="range" placeholder="Range (e.g., Sheet1!A1:C10)">
+        </div>
         <button onclick="loadGoogleAPI()">Generate JSON</button>
-        <textarea id="jsonOutput" readonly placeholder="Generated JSON text area"></textarea>
+        <textarea id="jsonOutput" readonly placeholder="Generated JSON will appear here"></textarea>
         <button onclick="copyText()">Copy</button>
         <div id="message"></div>
     </div>
@@ -84,9 +106,9 @@
             gapi.client.init({
                 'apiKey': API_KEY,
                 'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-            }).then(function() {
+            }).then(function () {
                 generateJSON();
-            }, function(error) {
+            }, function (error) {
                 console.error('Error initializing Google API client', error);
                 showMessage('Error initializing Google API client. Please check your API Key.');
             });
@@ -104,7 +126,7 @@
             gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: spreadsheetId,
                 range: range,
-            }).then(function(response) {
+            }).then(function (response) {
                 const values = response.result.values;
                 if (!values || values.length === 0) {
                     showMessage('No data found.');
@@ -122,7 +144,7 @@
 
                 document.getElementById('jsonOutput').value = JSON.stringify(jsonOutput, null, 2);
                 showMessage('JSON generated successfully!', 'green');
-            }, function(response) {
+            }, function (response) {
                 console.error('Error fetching data from spreadsheet', response.result.error);
                 showMessage('Error fetching data. Please check your Spreadsheet ID and Range.');
             });
@@ -142,4 +164,5 @@
         }
     </script>
 </body>
+
 </html>

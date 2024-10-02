@@ -74,7 +74,7 @@
         </div>
         <div class="input-group">
             <label for="formula">Formula (comma-separated ranges):</label>
-            <input type="text" id="formula" placeholder="e.g., F1:F3, H1:H3">
+            <input type="text" id="formula" placeholder="e.g., A1:A5, B1:B5, C1:C5">
         </div>
         <button onclick="loadGoogleAPI()">Generate JSON</button>
         <textarea id="jsonOutput" readonly placeholder="Generated JSON will appear here"></textarea>
@@ -132,7 +132,6 @@
                 const data = responses.map(response => response.result.values);
                 const jsonOutput = [];
 
-                // Assuming all ranges have the same number of rows
                 const rowCount = data[0] ? data[0].length : 0;
 
                 for (let i = 0; i < rowCount; i++) {
